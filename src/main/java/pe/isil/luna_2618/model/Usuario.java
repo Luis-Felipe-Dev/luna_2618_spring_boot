@@ -11,4 +11,29 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
     private Integer id;
+
+    private String nombres;
+
+    private String apellidos;
+
+    @Column(name = "nom_completo")
+    private String nombreCompleto;
+
+    private String email;
+
+    private String password;
+
+    public enum Rol{
+        ADMIN,
+        ESTUDIANTE
+    }
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
+    @PrePersist
+    @PreUpdate
+    void asignarNombreCompleto(){
+        nombreCompleto = nombres + " " + apellidos;
+    }
 }
