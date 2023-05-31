@@ -28,7 +28,7 @@ public class CursoController {
         model.addAttribute("cursos", cursos);
 
         //3. Retorno o envio a la vista
-        return "index";
+        return "curso/index";
     }
 
     @PostMapping("/insertar")
@@ -40,6 +40,6 @@ public class CursoController {
     @GetMapping("/insertar")
     String nuevo(Model model){
         model.addAttribute("curso", new Curso());
-        return "nuevo";
+        return "curso/nuevo";
     }
 }

@@ -53,7 +53,7 @@
      * Header
      */
     .masthead {
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
 
     .masthead-brand {
@@ -95,7 +95,7 @@
      * Cover
      */
     .cover {
-      padding: 0 1.5rem;
+      padding: 0 1rem;
     }
     .cover .btn-lg {
       padding: .75rem 1.25rem;
@@ -108,12 +108,12 @@
     .mastfoot {
       color: rgba(255, 255, 255, .5);
     }
+
     </style>
 </head>
 <body>
-
 <div class="container d-flex p-3 mx-auto flex-column text-center">
-    <header class="masthead mb-auto">
+    <header class="masthead">
         <div class="inner">
             <h3 class="masthead-brand">ISIL</h3>
             <nav class="nav nav-masthead justify-content-center">
@@ -123,10 +123,31 @@
             </nav>
         </div>
     </header>
-
     <main role="main" class="inner cover">
-        <h1 class="cover-heading">Bienvenido a ISIL!</h1>
-        <p class="lead">Periodo: 202310 NRC: 2618</p>
+        <h1 class="text-center mt-5">Bienvenido a Módulo Alumnos</h1>
+        <div class="text-center mt-4">
+            <a class="btn btn-success" href="/alumnos/insertar">Registrar Nuevo Alumno</a>
+        </div>
+        <table class="table table-bordered mt-4">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>NOMBRES</th>
+                <th>APELLIDOS</th>
+                <th>DNI</th>
+                <th>CARRERA</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="alumno : ${alumnos}">
+                <td th:text="${alumno.id}"></td>
+                <td th:text="${alumno.nombres}"></td>
+                <td th:text="${alumno.apellidos}"></td>
+                <td th:text="${alumno.dni}"></td>
+                <td th:text="${alumno.carrera}"></td>
+            </tr>
+            </tbody>
+        </table>
     </main>
 
     <footer class="mastfoot mt-auto">
