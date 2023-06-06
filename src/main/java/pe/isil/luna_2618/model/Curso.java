@@ -2,6 +2,8 @@ package pe.isil.luna_2618.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 
 @Data //constructor metodos:set, get
@@ -26,6 +28,8 @@ public class Curso {
     @Column(name = "fecha_act")
     private LocalDateTime fechaActualizacion;
 
+    @Transient
+    private MultipartFile imagen;
 
     //callbacks de ciclo de vida entidad
     @PrePersist
