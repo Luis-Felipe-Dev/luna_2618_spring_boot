@@ -3,6 +3,8 @@ package pe.isil.luna_2618.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.isil.luna_2618.model.Curso;
@@ -42,13 +44,24 @@ public class CursoController {
     //Funcion que agregue o inserte un nuevo curso a la base datos
     //@ResponseBody()
     @PostMapping("/insertar")
-    String insertar(Curso curso, Model model, RedirectAttributes ra){
-        if (!curso.getImagen().isEmpty()){
-            String rutaImagen = fileSystemStorageService.store(curso.getImagen());
-            curso.setRutaImagen(rutaImagen);
+    String insertar(@Validated Curso curso, BindingResult bindingResult, Model model, RedirectAttributes ra){
+        //genera un error si la imagen es vacía
+        if (curso.getImagen().isEmpty()){
+            bindingResult.rejectValue("imagen", "MultipartNotEmpty");
         }
+
+        //Si existe errores, retornamos el modelo curso con  los errores a la vista nuevo.html
+        if (bindingResult.hasErrors()){
+            model.addAttribute("curso", curso);
+            return "curso/nuevo";
+        }
+
+        String rutaImagen = fileSystemStorageService.store(curso.getImagen());
+        curso.setRutaImagen(rutaImagen);
         cursoRepository.save(curso);
+
         ra.addFlashAttribute("msgExito", "El curso has sido creado correctamente");
+
         return "redirect:/cursos";
     }
 
@@ -60,13 +73,24 @@ public class CursoController {
     }
 
     @PostMapping("/editar/{id}")
-    String actualizar(@PathVariable Integer id, Curso curso, Model model, RedirectAttributes ra){
+    String actualizar(@PathVariable Integer id, @Validated Curso curso, Model model, BindingResult bindingResult, RedirectAttributes ra){
         Curso cursoFromDB = cursoRepository.getById(id);
 
-        if (!curso.getImagen().isEmpty()){
-            String rutaImagen = fileSystemStorageService.store(curso.getImagen());
-            cursoFromDB.setRutaImagen(rutaImagen);
+        //genera un error si la imagen es vacía
+        if (curso.getImagen().isEmpty()){
+            bindingResult.rejectValue("imagen", "MultipartNotEmpty");
         }
+
+        //Si existe errores, retornamos el modelo curso con  los errores a la vista editar.html
+        if (bindingResult.hasErrors()){
+            model.addAttribute("curso", curso);
+            return "curso/editar";
+        }
+
+        String rutaImagen = fileSystemStorageService.store(curso.getImagen());
+        cursoFromDB.setRutaImagen(rutaImagen);
+
+
         cursoFromDB.setTitulo(curso.getTitulo());
         cursoFromDB.setDescripcion(curso.getDescripcion());
         cursoFromDB.setPrecio(curso.getPrecio());
